@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: react-frontend
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  source:
+    repoURL: https://github.com/SASowah/devops-end-to-end-labs.git
+    targetRevision: HEAD
+    path: helm/frontend     # or helm/backend for backend app
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,8 @@
+replicaCount: 2
+
+image:
+  repository: samsow/java-backend
+  tag: latest
+
+service:
+  port: 8080
