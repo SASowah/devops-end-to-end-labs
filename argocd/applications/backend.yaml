@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: java-backend
+  name: backend-app
   namespace: argocd
 spec:
+  project: default
+  source:
+    repoURL: https://github.com/SASowah/devops-end-to-end-labs
+    targetRevision: project-4-gitops-argocd
+    path: helm/backend
   destination:
     server: https://kubernetes.default.svc
     namespace: default
-  source:
-    repoURL: https://github.com/SASowah/devops-end-to-end-labs.git
-    targetRevision: HEAD
-    path: helm/backend
-  project: default
   syncPolicy:
     automated:
       prune: true
