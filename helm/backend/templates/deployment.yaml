@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
+  labels:
+    app: backend
+spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
