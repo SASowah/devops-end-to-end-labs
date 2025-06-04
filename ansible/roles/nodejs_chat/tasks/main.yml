@@ -15,11 +15,14 @@
   args:
     executable: /bin/bash
 
-- name: Clone sample Node.js chat app
-  git:
-    repo: https://github.com/socketio/chat-example.git
-    dest: /home/ubuntu/chat-app
-    version: master
+- name: Copy custom chat app files
+  copy:
+    src: files/
+    dest: /home/ubuntu/chat-app/
+    owner: ubuntu
+    group: ubuntu
+    mode: 0755
+
 
 - name: Install npm packages
   npm:
