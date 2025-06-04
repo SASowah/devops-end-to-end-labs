@@ -20,7 +20,6 @@ pipeline {
             steps {
                 sshagent(['chat-server-key']) {
                     sh 'ansible-playbook -i ansible/inventory.ini ansible/playbook.yml'
-                    }
                 }
             }
         }
@@ -33,7 +32,5 @@ pipeline {
         failure {
             echo 'Ansible playbook execution failed.'
         }
-        always {
-            cleanWs()
-        }
     }
+}
