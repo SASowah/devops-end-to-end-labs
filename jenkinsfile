@@ -5,11 +5,6 @@ pipeline {
         sshCredentials = credentials('chat-server-key')
     }
 
-    options {
-        timestamps()
-        ansiColor('xterm')
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
@@ -18,12 +13,6 @@ pipeline {
                     branches: [[name: '*/dev']],
                     userRemoteConfigs: [[url: 'https://github.com/SASowah/devops-end-to-end-labs.git']]
                 ])
-            }
-        }
-
-        stage('Install Ansible Dependencies') {
-            steps {
-                sh 'pip install --user -r ansible/requirements.txt || true'
             }
         }
 
@@ -40,6 +29,12 @@ pipeline {
     }
 
     post {
+        success {
+            echo 'Ansible playbook executed successfully!'
+        }
+        failure {
+            echo 'Ansible playbook execution failed.'
+        }
         always {
             cleanWs()
         }
