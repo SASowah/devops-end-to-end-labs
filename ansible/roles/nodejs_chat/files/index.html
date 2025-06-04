@@ -1,20 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CEEYIT Chat</title>
+  <title>CEEYIT Real-Time Chat App</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #eef; text-align: center; margin-top: 100px; }
+    body { font-family: Arial, sans-serif; background: #eef; text-align: center; margin: 50px; }
     h2 { color: #333; }
-    p { font-size: 18px; }
+    ul { list-style-type: none; padding: 0; max-width: 500px; margin: auto; }
+    li { background: #fff; padding: 10px; margin: 5px; border-radius: 5px; }
+    #m { padding: 10px; width: 300px; }
+    button { padding: 10px; }
   </style>
 </head>
 <body>
   <h2>CEEYIT Real-Time Chat App</h2>
-  <p>Status: <span id="status">Connecting...</span></p>
+  <ul id="messages"></ul>
+  <input id="m" autocomplete="off" placeholder="Type a message..." />
+  <button onclick="sendMessage()">Send</button>
+
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-    document.getElementById('status').textContent = 'Connected';
+
+    const sendMessage = () => {
+      const input = document.getElementById('m');
+      const msg = input.value;
+      if (msg.trim() !== '') {
+        socket.emit('chat message', msg);
+        input.value = '';
+      }
+    };
+
+    socket.on('chat message', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      document.getElementById('messages').appendChild(li);
+    });
+
+    document.getElementById('m').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
   </script>
 </body>
 </html>
