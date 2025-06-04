@@ -1,43 +1,371 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>CEEYIT Real-Time Chat App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEEYIT Enterprise Chat Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    body { font-family: Arial, sans-serif; background: #eef; text-align: center; margin: 50px; }
-    h2 { color: #333; }
-    ul { list-style-type: none; padding: 0; max-width: 500px; margin: auto; }
-    li { background: #fff; padding: 10px; margin: 5px; border-radius: 5px; }
-    #m { padding: 10px; width: 300px; }
-    button { padding: 10px; }
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --secondary: #0ea5e9;
+      --light: #f3f4f6;
+      --dark: #1f2937;
+      --success: #10b981;
+      --danger: #ef4444;
+      --gray: #9ca3af;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f6f7ff 0%, #e9eeff 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .chat-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+    
+    .chat-header {
+      background: var(--primary);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 12px 12px 0 0;
+    }
+    
+    .chat-header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .online-indicator {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    
+    .online-dot {
+      height: 10px;
+      width: 10px;
+      background-color: var(--success);
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.5; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0.5; transform: scale(0.8); }
+    }
+    
+    .messages-container {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .message-list {
+      list-style-type: none;
+      width: 100%;
+    }
+    
+    .message {
+      margin-bottom: 1rem;
+      padding: 0.8rem 1.2rem;
+      border-radius: 18px;
+      max-width: 80%;
+      position: relative;
+      animation: fadeIn 0.3s ease-out;
+      word-wrap: break-word;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .message.received {
+      background-color: var(--light);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    
+    .message.sent {
+      background-color: var(--primary);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+      margin-left: auto;
+    }
+    
+    .message-time {
+      font-size: 0.7rem;
+      color: var(--gray);
+      margin-top: 0.3rem;
+      text-align: right;
+    }
+    
+    .message.sent .message-time {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .input-area {
+      display: flex;
+      padding: 1rem;
+      background: white;
+      border-top: 1px solid #eee;
+    }
+    
+    .message-input {
+      flex: 1;
+      padding: 0.8rem 1.2rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 24px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    
+    .message-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .send-button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      margin-left: 0.8rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .send-button:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+    
+    .send-button:active {
+      transform: scale(0.95);
+    }
+    
+    .typing-indicator {
+      padding: 0.5rem 1rem;
+      color: var(--gray);
+      font-style: italic;
+      font-size: 0.9rem;
+      visibility: hidden;
+    }
+    
+    .typing-indicator.active {
+      visibility: visible;
+    }
+    
+    .user-info {
+      font-weight: 500;
+      font-size: 0.8rem;
+      margin-bottom: 0.2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .chat-container {
+        margin: 0;
+        border-radius: 0;
+        height: 100vh;
+      }
+      
+      .chat-header {
+        border-radius: 0;
+      }
+      
+      .message {
+        max-width: 90%;
+      }
+    }
   </style>
 </head>
 <body>
-  <h2>CEEYIT Real-Time Chat App</h2>
-  <ul id="messages"></ul>
-  <input id="m" autocomplete="off" placeholder="Type a message..." />
-  <button onclick="sendMessage()">Send</button>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h1><i class="fas fa-comments"></i> CEEYIT Enterprise Chat</h1>
+      <div class="online-indicator">
+        <div class="online-dot"></div>
+        <span>Online</span>
+      </div>
+    </div>
+    
+    <div class="messages-container">
+      <ul id="messages" class="message-list"></ul>
+    </div>
+    
+    <div id="typing-indicator" class="typing-indicator">Someone is typing...</div>
+    
+    <div class="input-area">
+      <input 
+        id="message-input" 
+        class="message-input" 
+        type="text" 
+        placeholder="Type your message here..." 
+        autocomplete="off"
+      />
+      <button id="send-button" class="send-button">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = io();
-
-    const sendMessage = () => {
-      const input = document.getElementById('m');
-      const msg = input.value;
-      if (msg.trim() !== '') {
-        socket.emit('chat message', msg);
-        input.value = '';
-      }
-    };
-
-    socket.on('chat message', (msg) => {
-      const li = document.createElement('li');
-      li.textContent = msg;
-      document.getElementById('messages').appendChild(li);
-    });
-
-    document.getElementById('m').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') sendMessage();
+    document.addEventListener('DOMContentLoaded', () => {
+      const socket = io();
+      const messageInput = document.getElementById('message-input');
+      const sendButton = document.getElementById('send-button');
+      const messagesList = document.getElementById('messages');
+      const typingIndicator = document.getElementById('typing-indicator');
+      
+      // Generate a random username for this session
+      const username = `User_${Math.floor(Math.random() * 10000)}`;
+      let typingTimeout;
+      
+      // Function to format current time
+      const formatTime = () => {
+        const now = new Date();
+        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      };
+      
+      // Function to create and append a message
+      const appendMessage = (content, isSent = false, user = null) => {
+        const li = document.createElement('li');
+        li.className = `message ${isSent ? 'sent' : 'received'}`;
+        
+        let messageContent = '';
+        
+        if (!isSent && user) {
+          messageContent += `<div class="user-info">${user}</div>`;
+        }
+        
+        messageContent += `
+          <div class="message-content">${content}</div>
+          <div class="message-time">${formatTime()}</div>
+        `;
+        
+        li.innerHTML = messageContent;
+        messagesList.appendChild(li);
+        
+        // Scroll to the bottom
+        const messagesContainer = document.querySelector('.messages-container');
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      };
+      
+      // Send message function
+      const sendMessage = () => {
+        const message = messageInput.value.trim();
+        if (message !== '') {
+          // Emit the message to the server
+          socket.emit('chat message', {
+            content: message,
+            username: username
+          });
+          
+          // Add the message to our UI
+          appendMessage(message, true);
+          
+          // Clear the input
+          messageInput.value = '';
+          
+          // Focus back on the input
+          messageInput.focus();
+          
+          // Clear the typing indicator
+          socket.emit('stop typing');
+        }
+      };
+      
+      // Event listeners
+      sendButton.addEventListener('click', sendMessage);
+      
+      messageInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          sendMessage();
+        } else {
+          // Emit typing event
+          socket.emit('typing', username);
+          
+          // Clear the previous timeout
+          clearTimeout(typingTimeout);
+          
+          // Set a new timeout
+          typingTimeout = setTimeout(() => {
+            socket.emit('stop typing');
+          }, 2000);
+        }
+      });
+      
+      // Socket events
+      socket.on('chat message', (data) => {
+        if (data.username !== username) {
+          appendMessage(data.content, false, data.username);
+        }
+      });
+      
+      socket.on('user joined', (data) => {
+        const message = `${data.username} has joined the chat`;
+        const li = document.createElement('li');
+        li.textContent = message;
+        li.style.textAlign = 'center';
+        li.style.color = 'var(--gray)';
+        li.style.padding = '0.5rem';
+        messagesList.appendChild(li);
+      });
+      
+      socket.on('typing', (data) => {
+        if (data.username !== username) {
+          typingIndicator.textContent = `${data.username} is typing...`;
+          typingIndicator.classList.add('active');
+        }
+      });
+      
+      socket.on('stop typing', () => {
+        typingIndicator.classList.remove('active');
+      });
+      
+      // Announce this user has joined
+      socket.emit('user joined', { username });
+      
+      // Welcome message
+      appendMessage('Welcome to CEEYIT Enterprise Chat! Start chatting now.', false, 'System');
     });
   </script>
 </body>
