@@ -1,0 +1,5 @@
+- name: Configure Node.js Chat Server
+  hosts: nodejs_chat
+  become: yes
+  roles:
+    - nodejs_chat

@@ -1,0 +1,78 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install dependencies
+  apt:
+    name: ['curl', 'git', 'nginx']
+    state: present
+
+- name: Install Node.js (LTS)
+  shell: |
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+    apt-get install -y nodejs
+  args:
+    executable: /bin/bash
+
+- name: Clone sample Node.js chat app
+  git:
+    repo: https://github.com/socketio/chat-example.git
+    dest: /home/ubuntu/chat-app
+    version: master
+
+- name: Install npm packages
+  npm:
+    path: /home/ubuntu/chat-app
+
+- name: Create systemd service for chat app
+  copy:
+    dest: /etc/systemd/system/chat-app.service
+    content: |
+      [Unit]
+      Description=Node.js Chat App
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/bin/node /home/ubuntu/chat-app/index.js
+      Restart=always
+      User=ubuntu
+      Environment=PORT=3000
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Start and enable chat app service
+  systemd:
+    name: chat-app
+    enabled: yes
+    state: started
+
+- name: Configure Nginx as reverse proxy
+  copy:
+    dest: /etc/nginx/sites-available/default
+    content: |
+      server {
+          listen 80;
+          location / {
+              proxy_pass http://localhost:3000;
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header Host $host;
+              proxy_cache_bypass $http_upgrade;
+          }
+      }
+  notify: Restart nginx
+
+- name: Ensure nginx is running
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+# Handler
+- name: Restart nginx
+  systemd:
+    name: nginx
+    state: restarted
