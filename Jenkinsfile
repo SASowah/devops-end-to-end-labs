@@ -18,11 +18,9 @@ pipeline {
 
         stage('Run Ansible Playbook') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'chat-server-key', keyFileVariable: 'SSH_KEY')]) {
-                    sh '''
-                        export ANSIBLE_HOST_KEY_CHECKING=False
-                        ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --private-key $SSH_KEY
-                    '''
+                sshagent(['sshCredentials']) {
+                    sh 'ansible-playbook -i ansible/inventory.ini ansible/playbook.yml'
+                    }
                 }
             }
         }
@@ -39,4 +37,3 @@ pipeline {
             cleanWs()
         }
     }
-}
