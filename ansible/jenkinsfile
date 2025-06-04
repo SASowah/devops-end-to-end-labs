@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        sshCredentials = credentials('chat-server-key')
+    }
+
+    options {
+        timestamps()
+        ansiColor('xterm')
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/dev']],
+                    userRemoteConfigs: [[url: 'https://github.com/SASowah/devops-end-to-end-labs.git']]
+                ])
+            }
+        }
+
+        stage('Install Ansible Dependencies') {
+            steps {
+                sh 'pip install --user -r ansible/requirements.txt || true'
+            }
+        }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'chat-server-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh '''
+                        export ANSIBLE_HOST_KEY_CHECKING=False
+                        ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --private-key $SSH_KEY
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
