@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        sshCredentials = credentials('chat-server-key')
+        SSH_KEY = credentials('chat-server-key')
     }
 
     stages {
@@ -18,7 +18,7 @@ pipeline {
 
         stage('Run Ansible Playbook') {
             steps {
-                sshagent(['sshCredentials']) {
+                sshagent(['chat-server-key']) {
                     sh 'ansible-playbook -i ansible/inventory.ini ansible/playbook.yml'
                     }
                 }
