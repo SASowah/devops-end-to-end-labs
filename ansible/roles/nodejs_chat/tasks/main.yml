@@ -65,6 +65,7 @@
       }
   notify: Restart nginx
 
+
 - name: Ensure nginx is running
   systemd:
     name: nginx
