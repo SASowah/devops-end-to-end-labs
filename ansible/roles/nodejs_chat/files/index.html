@@ -429,6 +429,222 @@
         right: 0.5rem;
       }
     }
+
+    /* Message Status Icons */
+    .message-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.7rem;
+      margin-left: 4px;
+      color: var(--text-secondary);
+    }
+
+    .message-status i {
+      font-size: 0.8rem;
+    }
+
+    .message-status.read i {
+      color: var(--primary);
+    }
+
+    /* Message Reactions */
+    .message-reactions {
+      position: absolute;
+      bottom: -20px;
+      right: 0;
+      display: flex;
+      gap: 2px;
+      background: var(--container-bg);
+      padding: 2px 6px;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      font-size: 0.8rem;
+    }
+
+    .reaction-button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 2px;
+      transition: transform 0.2s;
+    }
+
+    .reaction-button:hover {
+      transform: scale(1.2);
+    }
+
+    /* Message Grouping */
+    .message-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .message-group .message {
+      margin-bottom: 0;
+    }
+
+    .message-group .message:not(:last-child) {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-group .message:not(:first-child) {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+
+    /* Message Menu */
+    .message-menu {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--container-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px var(--shadow-color);
+      padding: 0.5rem;
+      display: none;
+      z-index: 100;
+    }
+
+    .message-menu.active {
+      display: block;
+    }
+
+    .message-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .message-menu-item:hover {
+      background: var(--border-color);
+    }
+
+    /* Message Actions */
+    .message-actions {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: -40px;
+      display: none;
+      gap: 4px;
+    }
+
+    .message:hover .message-actions {
+      display: flex;
+    }
+
+    .message-action-button {
+      background: var(--container-bg);
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .message-action-button:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Message Input Improvements */
+    .input-area {
+      position: relative;
+    }
+
+    .input-actions {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .input-action-button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .input-action-button:hover {
+      background: var(--border-color);
+      color: var(--primary);
+    }
+
+    .message-input {
+      padding-left: 3rem;
+    }
+
+    /* Emoji Picker */
+    .emoji-picker {
+      position: absolute;
+      bottom: 100%;
+      left: 1rem;
+      background: var(--container-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px var(--shadow-color);
+      padding: 0.5rem;
+      display: none;
+      z-index: 100;
+    }
+
+    .emoji-picker.active {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 0.5rem;
+    }
+
+    .emoji-item {
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .emoji-item:hover {
+      background: var(--border-color);
+    }
+
+    /* Message Time Tooltip */
+    .message-time {
+      position: relative;
+    }
+
+    .message-time:hover::after {
+      content: attr(data-full-time);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--container-bg);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      z-index: 100;
+    }
   </style>
 </head>
 <body>
@@ -477,6 +693,15 @@
     <div id="typing-indicator" class="typing-indicator">Someone is typing...</div>
     
     <div class="input-area">
+      <div class="input-actions">
+        <button class="input-action-button" id="emoji-button" title="Add emoji">
+          <i class="far fa-smile"></i>
+        </button>
+        <button class="input-action-button" id="attach-button" title="Attach file">
+          <i class="fas fa-paperclip"></i>
+        </button>
+      </div>
+      <div id="emoji-picker" class="emoji-picker"></div>
       <input 
         id="message-input" 
         class="message-input" 
@@ -547,6 +772,39 @@
           .slice(0, 2);
       };
       
+      // Emoji picker setup
+      const emojiButton = document.getElementById('emoji-button');
+      const emojiPicker = document.getElementById('emoji-picker');
+      const emojis = ['😊', '😂', '❤️', '👍', '🎉', '🔥', '👏', '🙌', '🤔', '😎', '😢', '😡', '👋', '💪', '🎯', '✨'];
+      
+      emojis.forEach(emoji => {
+        const button = document.createElement('button');
+        button.className = 'emoji-item';
+        button.textContent = emoji;
+        button.onclick = () => {
+          messageInput.value += emoji;
+          messageInput.focus();
+        };
+        emojiPicker.appendChild(button);
+      });
+
+      emojiButton.addEventListener('click', () => {
+        emojiPicker.classList.toggle('active');
+      });
+
+      // Close emoji picker when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!emojiButton.contains(e.target) && !emojiPicker.contains(e.target)) {
+          emojiPicker.classList.remove('active');
+        }
+      });
+
+      // Function to format full date and time
+      const formatFullTime = () => {
+        const now = new Date();
+        return now.toLocaleString();
+      };
+
       // Function to create and append a message
       const appendMessage = (content, isSent = false, user = null) => {
         const li = document.createElement('li');
@@ -558,17 +816,80 @@
           messageContent += `<div class="user-info">${user}</div>`;
         }
         
+        const fullTime = formatFullTime();
         messageContent += `
           <div class="message-content">${content}</div>
-          <div class="message-time">${formatTime()}</div>
+          <div class="message-time" data-full-time="${fullTime}">${formatTime()}</div>
+          ${isSent ? `
+            <div class="message-status">
+              <i class="fas fa-check-double"></i>
+            </div>
+          ` : ''}
+          <div class="message-actions">
+            <button class="message-action-button" title="React">
+              <i class="far fa-smile"></i>
+            </button>
+            <button class="message-action-button" title="Reply">
+              <i class="fas fa-reply"></i>
+            </button>
+            <button class="message-action-button" title="More">
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
+          </div>
         `;
         
         li.innerHTML = messageContent;
         messagesList.appendChild(li);
         
+        // Add message menu
+        const menu = document.createElement('div');
+        menu.className = 'message-menu';
+        menu.innerHTML = `
+          <div class="message-menu-item">
+            <i class="fas fa-reply"></i>
+            Reply
+          </div>
+          <div class="message-menu-item">
+            <i class="fas fa-forward"></i>
+            Forward
+          </div>
+          <div class="message-menu-item">
+            <i class="fas fa-copy"></i>
+            Copy
+          </div>
+          <div class="message-menu-item">
+            <i class="fas fa-trash"></i>
+            Delete
+          </div>
+        `;
+        li.appendChild(menu);
+
+        // Add click handlers for message actions
+        const moreButton = li.querySelector('.message-action-button:last-child');
+        moreButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          menu.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!menu.contains(e.target) && !moreButton.contains(e.target)) {
+            menu.classList.remove('active');
+          }
+        });
+
         // Scroll to the bottom
         const messagesContainer = document.querySelector('.messages-container');
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Simulate message read status
+        if (isSent) {
+          setTimeout(() => {
+            const status = li.querySelector('.message-status');
+            status.innerHTML = '<i class="fas fa-check-double"></i>';
+            status.classList.add('read');
+          }, 2000);
+        }
       };
 
       // Function to append system message
@@ -665,6 +986,23 @@
       
       socket.on('stop typing', () => {
         typingIndicator.classList.remove('active');
+      });
+
+      // Handle file attachment
+      const attachButton = document.getElementById('attach-button');
+      attachButton.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*,video/*,audio/*';
+        input.onchange = (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            // Here you would typically upload the file and get a URL
+            // For now, we'll just show a message
+            appendMessage(`📎 Attached: ${file.name}`, true);
+          }
+        };
+        input.click();
       });
     });
   </script>
