@@ -27,7 +27,7 @@ pipeline {
     post {
         success {
             echo 'Ansible playbook executed successfully!'
-            echo 'You can now access the chat server at http://
+            echo 'You can now access the chat server at http://44.207.84.102'
         }
         failure {
             echo 'Ansible playbook execution failed.'
