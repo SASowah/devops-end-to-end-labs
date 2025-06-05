@@ -6,12 +6,8 @@
     enabled: yes
 
 - name: Reload systemd and restart chat app
-  block:
-    - name: Reload systemd
-      command: systemctl daemon-reexec
-
-    - name: Restart chat app service
-      systemd:
-        name: chat-app
-        enabled: yes
-        state: restarted
+  shell: |
+    systemctl daemon-reexec
+    systemctl restart chat-app
+  args:
+    executable: /bin/bash
