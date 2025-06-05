@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'dev'
+                git branch: 'dev',
                 url: 'https://github.com/SASowah/devops-end-to-end-labs.git'
 
             
