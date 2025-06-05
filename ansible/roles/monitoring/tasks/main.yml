@@ -116,12 +116,3 @@
     name: grafana-server
     enabled: yes
     state: started
-
-# --------------------------
-# HANDLERS
-# --------------------------
-handlers:
-  - name: Restart Prometheus
-    systemd:
-      name: prometheus
-      state: restarted
