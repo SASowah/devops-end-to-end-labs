@@ -37,7 +37,7 @@
       After=network.target
 
       [Service]
-      ExecStart=/usr/bin/node /home/ubuntu/chat-app/index.js
+      ExecStart=/usr/bin/node /home/ubuntu/chat-app/app.js
       Restart=always
       User=ubuntu
       Environment=PORT=3000
