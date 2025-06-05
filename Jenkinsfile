@@ -8,11 +8,10 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/dev']],
-                    userRemoteConfigs: [[url: 'https://github.com/SASowah/devops-end-to-end-labs.git']]
-                ])
+                git branch: 'dev'
+                url: 'https://github.com/SASowah/devops-end-to-end-labs.git'
+
+            
             }
         }
 
@@ -28,6 +27,7 @@ pipeline {
     post {
         success {
             echo 'Ansible playbook executed successfully!'
+            echo 'You can now access the chat server at http://
         }
         failure {
             echo 'Ansible playbook execution failed.'
