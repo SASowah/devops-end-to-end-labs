@@ -1,5 +1,17 @@
+---
 - name: Restart nginx
-  become: yes
   systemd:
     name: nginx
     state: restarted
+    enabled: yes
+
+- name: Reload systemd and restart chat app
+  block:
+    - name: Reload systemd
+      command: systemctl daemon-reexec
+
+    - name: Restart chat app service
+      systemd:
+        name: chat-app
+        enabled: yes
+        state: restarted

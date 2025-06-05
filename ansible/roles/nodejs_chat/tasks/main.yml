@@ -23,7 +23,6 @@
     group: ubuntu
     mode: 0755
 
-
 - name: Install npm packages
   npm:
     path: /home/ubuntu/chat-app
@@ -44,12 +43,7 @@
 
       [Install]
       WantedBy=multi-user.target
-
-- name: Start and enable chat app service
-  systemd:
-    name: chat-app
-    enabled: yes
-    state: started
+  notify: Reload systemd and restart chat app
 
 - name: Configure Nginx as reverse proxy
   copy:
@@ -68,9 +62,8 @@
       }
   notify: Restart nginx
 
-
 - name: Ensure nginx is running
   systemd:
     name: nginx
-    state: restarted
+    state: started
     enabled: yes
