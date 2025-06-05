@@ -3,15 +3,14 @@ pipeline {
 
     environment {
         SSH_KEY = credentials('chat-server-key')
+        SERVER_IP = '44.207.84.102' // Change this if your IP updates
     }
 
     stages {
         stage('Checkout Code') {
             steps {
                 git branch: 'dev',
-                url: 'https://github.com/SASowah/devops-end-to-end-labs.git'
-
-            
+                    url: 'https://github.com/SASowah/devops-end-to-end-labs.git'
             }
         }
 
@@ -26,11 +25,15 @@ pipeline {
 
     post {
         success {
-            echo 'Ansible playbook executed successfully!'
-            echo 'You can now access the chat server at http://44.207.84.102'
+            echo '✅ Deployment Successful! Access the following services:'
+            echo "Chat App:       http://${env.SERVER_IP}"
+            echo "Prometheus:     http://${env.SERVER_IP}:9090"
+            echo "Grafana:        http://${env.SERVER_IP}:3000"
+            echo 'Default Grafana Login: admin / admin'
         }
+
         failure {
-            echo 'Ansible playbook execution failed.'
+            echo '❌ Deployment failed. Check Ansible and Jenkins logs for details.'
         }
     }
 }

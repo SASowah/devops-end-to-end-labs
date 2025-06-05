@@ -3,3 +3,4 @@
   become: yes
   roles:
     - nodejs_chat
+    - monitoring

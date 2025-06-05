@@ -23,9 +23,11 @@
     group: ubuntu
     mode: 0755
 
-- name: Install npm packages
+- name: Install npm packages (express, socket.io, prom-client)
   npm:
     path: /home/ubuntu/chat-app
+    production: no
+
 
 - name: Create systemd service for chat app
   copy:
