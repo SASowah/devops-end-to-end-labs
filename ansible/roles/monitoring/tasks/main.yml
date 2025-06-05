@@ -63,7 +63,7 @@
         - job_name: 'nodejs_chat_app'
           static_configs:
             - targets: ['localhost:3000/metrics']
-    notify: Restart Prometheus
+  notify: Restart Prometheus
 
 - name: Create Prometheus systemd service
   copy:
