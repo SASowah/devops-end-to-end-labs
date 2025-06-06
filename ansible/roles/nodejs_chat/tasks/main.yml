@@ -27,7 +27,7 @@
   npm:
     path: /home/ubuntu/chat-app
     production: no
-
+  notify: Restart chat app
 
 - name: Create systemd service for chat app
   copy:
@@ -45,7 +45,7 @@
 
       [Install]
       WantedBy=multi-user.target
-  notify: Reload systemd and restart chat app
+  notify: Restart chat app
 
 - name: Configure Nginx as reverse proxy
   copy:

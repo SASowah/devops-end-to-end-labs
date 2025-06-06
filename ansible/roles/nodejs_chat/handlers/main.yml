@@ -1,13 +1,10 @@
 ---
+- name: Restart chat app
+  systemd:
+    name: chat-app
+    state: restarted
+
 - name: Restart nginx
   systemd:
     name: nginx
     state: restarted
-    enabled: yes
-
-- name: Reload systemd and restart chat app
-  shell: |
-    systemctl daemon-reexec
-    systemctl restart chat-app
-  args:
-    executable: /bin/bash
