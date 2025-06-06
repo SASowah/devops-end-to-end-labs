@@ -61,6 +61,7 @@
 
       scrape_configs:
         - job_name: 'nodejs_chat_app'
+          metrics_path: /metrics
           static_configs:
             - targets: ['localhost:3000']
 
