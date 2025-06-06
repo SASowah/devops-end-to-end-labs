@@ -2,7 +2,7 @@
 
 This project showcases an end-to-end DevOps pipeline that provisions cloud infrastructure using Terraform, configures the environment with Ansible, and automates deployments through Jenkins. The deployed application is a real-time chat app built with Node.js and Socket.IO.
 
-## 🔧 Tools & Technologies
+## Tools & Technologies
 - **Terraform** – for infrastructure provisioning (EC2, Elastic IP, Security Groups)
 - **Ansible** – for server configuration and app deployment
 - **Jenkins** – for CI/CD pipeline automation
@@ -10,7 +10,7 @@ This project showcases an end-to-end DevOps pipeline that provisions cloud infra
 - **Nginx** – used as a reverse proxy for the chat app
 - **GitHub** – source repository triggering Jenkins builds
 
-## 🛠️ Setup Overview
+## Setup Overview
 
 ### Terraform
 - Provisions:
@@ -29,10 +29,10 @@ This project showcases an end-to-end DevOps pipeline that provisions cloud infra
 - Executes Ansible playbook via ssh-agent
 - Displays final IP in post-deployment log
 
-## 🌐 Live App (via Elastic IP)
+## Live App (via Elastic IP)
 Visit: `http://<your-elastic-ip>`  
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── ansible/
