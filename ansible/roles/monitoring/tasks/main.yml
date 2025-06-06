@@ -63,7 +63,7 @@
         - job_name: 'nodejs_chat_app'
           static_configs:
             - targets: ['localhost:3000']
-              metrics_path: /metrics
+
 
   notify: Restart Prometheus
 
