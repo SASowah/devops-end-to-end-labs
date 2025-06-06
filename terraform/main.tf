@@ -113,7 +113,7 @@ resource "aws_security_group" "jenkins_sg" {
   }
 }
 
-# Jenkins EC2 Instance
+# Jenkins EC2 Instance (without associate_public_ip)
 resource "aws_instance" "jenkins_server" {
   ami                    = "ami-084568db4383264d4"
   instance_type          = "t2.micro"
