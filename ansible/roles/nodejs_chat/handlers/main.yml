@@ -1,0 +1,10 @@
+---
+- name: Restart chat app
+  systemd:
+    name: chat-app
+    state: restarted
+
+- name: Restart nginx
+  systemd:
+    name: nginx
+    state: restarted
