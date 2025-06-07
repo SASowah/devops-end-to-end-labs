@@ -9,5 +9,5 @@ output "lambda_function_name" {
 
 output "api_gateway_url" {
   description = "Public URL to trigger Lambda via API Gateway"
-  value       = "https://${aws_apigatewayv2_api.http_api.api_endpoint}/file"
+  value       = "${aws_apigatewayv2_api.http_api.api_endpoint}/file"
 }
