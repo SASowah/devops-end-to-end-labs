@@ -3,7 +3,7 @@ name: Deploy Lambda to AWS
 on:
   push:
     branches:
-      - project-3-s3-lambda
+      - project-3-s3-lambda-clean
 
 jobs:
   deploy:
