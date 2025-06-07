@@ -9,8 +9,13 @@ spec:
     repoURL: https://github.com/SASowah/devops-end-to-end-labs
     targetRevision: project-4-gitops-argocd
     path: helm/backend
+<<<<<<< HEAD
   helm:
       releaseName: backend
+=======
+    helm:
+  releaseName: backend
+>>>>>>> a4af087db274acefc4686c68bc89d9db68e45fdf
   destination:
     server: https://kubernetes.default.svc
     namespace: default
