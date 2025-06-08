@@ -151,3 +151,59 @@ terraform.rc
 .terraform.lock.hcl
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform
+
+
+# Reference/backup text files
+argocdapplicationsbackend.yaml.txt
+terraformeksalb-controller.tf.txt
+
+
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Kubernetes and Helm
+kubeconfig
+*.kubeconfig
+*.pem
+*.key
+*.crt
+*.pub
+patch.json
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-*
+*.code-workspace
+
+# Environment variables
+.env
+.env.*
+.envrc
+
+# Temporary files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+out/
+.next/
+
+# Misc
+*.bak
+*.backup
+*.old
+*.new
+*.orig
+*.rej
+*.tmp
