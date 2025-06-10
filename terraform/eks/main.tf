@@ -24,6 +24,8 @@ module "vpc" {
 
   tags = {
     Project = "gitops"
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+
   }
 }
 
