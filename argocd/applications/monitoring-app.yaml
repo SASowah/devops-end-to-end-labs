@@ -24,8 +24,9 @@ spec:
               alb.ingress.kubernetes.io/scheme: internet-facing
               alb.ingress.kubernetes.io/target-type: ip
               alb.ingress.kubernetes.io/backend-protocol: HTTP
-            path: /
-            pathType: Prefix   
+              alb.ingress.kubernetes.io/rewrite-target: /
+            path: /*
+            pathType: ImplementationSpecific  
         prometheus:
           service:
             type: ClusterIP
