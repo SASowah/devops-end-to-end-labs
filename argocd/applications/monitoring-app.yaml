@@ -25,9 +25,7 @@ spec:
               alb.ingress.kubernetes.io/target-type: ip
               alb.ingress.kubernetes.io/backend-protocol: HTTP
             path: /
-            pathType: Prefix
-            hosts:
-              - grafana.local
+            pathType: Prefix   
         prometheus:
           service:
             type: ClusterIP
