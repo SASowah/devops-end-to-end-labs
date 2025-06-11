@@ -11,7 +11,7 @@ output "cluster_name" {
 output "region" {
   value = var.aws_region
 }
-
+/*
 data "kubernetes_service" "grafana" {
   metadata {
     name      = "prometheus-grafana"
@@ -36,3 +36,4 @@ output "grafana_port_forward_command" {
   description = "Command to port forward Grafana to localhost"
   value       = "kubectl port-forward svc/prometheus-grafana 3000:80 -n monitoring"
 }
+*/
