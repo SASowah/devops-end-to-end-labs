@@ -26,7 +26,7 @@ spec:
               alb.ingress.kubernetes.io/backend-protocol: HTTP
               alb.ingress.kubernetes.io/rewrite-target: /
             path: /*
-            pathType: ImplementationSpecific  
+            pathType: ImplementationSpecific
         prometheus:
           service:
             type: ClusterIP
@@ -40,3 +40,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - Replace=true   # ✅ Ensures old Ingress rules are fully replaced
