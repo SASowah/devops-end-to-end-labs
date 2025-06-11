@@ -1,3 +1,4 @@
+/*
 resource "helm_release" "prometheus" {
   name       = "prometheus"
   repository = "https://prometheus-community.github.io/helm-charts"
@@ -60,3 +61,4 @@ resource "kubernetes_ingress_v1" "grafana_ingress" {
     }
   }
 }
+*/
