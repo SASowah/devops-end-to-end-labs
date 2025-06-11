@@ -12,24 +12,24 @@ spec:
     helm:
       values: |
         grafana:
-          enabled: true
-          adminUser: admin
-          adminPassword: admin
-          service:
-            type: ClusterIP
-          ingress:
-            enabled: true
-            annotations:
-              kubernetes.io/ingress.class: alb
-              alb.ingress.kubernetes.io/scheme: internet-facing
-              alb.ingress.kubernetes.io/target-type: ip
-              alb.ingress.kubernetes.io/backend-protocol: HTTP
-              alb.ingress.kubernetes.io/rewrite-target: /
-            path: /*
-            pathType: ImplementationSpecific
-        prometheus:
-          service:
-            type: ClusterIP
+      enabled: true
+      adminUser: admin
+      adminPassword: admin
+      service:
+        type: ClusterIP
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: alb
+          alb.ingress.kubernetes.io/scheme: internet-facing
+          alb.ingress.kubernetes.io/target-type: ip
+          alb.ingress.kubernetes.io/backend-protocol: HTTP
+          alb.ingress.kubernetes.io/rewrite-target: /
+        path: /*
+        pathType: ImplementationSpecific
+    prometheus:
+      service:
+        type: ClusterIP
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
