@@ -16,9 +16,18 @@ spec:
           adminUser: admin
           adminPassword: admin
           service:
-            type: LoadBalancer
+            type: ClusterIP
           ingress:
-            enabled: false
+            enabled: true
+            annotations:
+              kubernetes.io/ingress.class: alb
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/target-type: ip
+              alb.ingress.kubernetes.io/backend-protocol: HTTP
+            path: /
+            pathType: Prefix
+            hosts:
+              - grafana.local
         prometheus:
           service:
             type: ClusterIP
@@ -31,4 +40,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true       # ✅ THE FIX!
+      - ServerSideApply=true
