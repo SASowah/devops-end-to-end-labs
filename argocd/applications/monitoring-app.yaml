@@ -18,14 +18,7 @@ spec:
           service:
             type: LoadBalancer
           ingress:
-            enabled: true
-            path: /grafana
-            pathType: Prefix
-            annotations:
-              kubernetes.io/ingress.class: alb
-              alb.ingress.kubernetes.io/scheme: internet-facing
-              alb.ingress.kubernetes.io/target-type: ip
-              alb.ingress.kubernetes.io/backend-protocol: HTTP
+            enabled: false
         prometheus:
           service:
             type: ClusterIP
@@ -38,3 +31,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true       # ✅ THE FIX!
