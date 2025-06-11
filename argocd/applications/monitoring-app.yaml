@@ -6,9 +6,29 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/<your-username>/<your-repo>
-    targetRevision: project-4-gitops-argocd
-    path: helm/monitoring
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 45.7.1
+    helm:
+      values: |
+        grafana:
+          enabled: true
+          adminUser: admin
+          adminPassword: admin
+          service:
+            type: LoadBalancer
+          ingress:
+            enabled: true
+            path: /grafana
+            pathType: Prefix
+            annotations:
+              kubernetes.io/ingress.class: alb
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/target-type: ip
+              alb.ingress.kubernetes.io/backend-protocol: HTTP
+        prometheus:
+          service:
+            type: ClusterIP
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
