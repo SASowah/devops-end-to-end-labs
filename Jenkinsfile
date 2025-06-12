@@ -32,17 +32,19 @@ pipeline {
         }
         
         stage('Deploy to EKS') {
-            steps {
-                script {
-                    sh "aws eks update-kubeconfig --region us-east-1 --name ecommerce-eks"
-                    sh "kubectl apply -f kubernetes/deployment.yaml"
-                    sh "kubectl apply -f kubernetes/service.yaml"
-                    sh "kubectl apply -f kubernetes/ingress.yaml"
-                    
-                }
-            }
+    steps {
+        withCredentials([usernamePassword(credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+            sh '''
+              export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+              export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+              aws eks update-kubeconfig --region us-east-1 --name ecommerce-eks
+              kubectl apply -f kubernetes/deployment.yaml
+              kubectl apply -f kubernetes/service.yaml
+              kubectl apply -f kubernetes/ingress.yaml
+            '''
         }
     }
+}
     
     post {
         always {
