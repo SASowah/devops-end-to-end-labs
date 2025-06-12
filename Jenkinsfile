@@ -37,10 +37,14 @@ pipeline {
                     sh '''
                         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
                         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                        aws eks update-kubeconfig --region us-east-1 --name ecommerce-eks
-                        kubectl apply -f kubernetes/deployment.yaml
-                        kubectl apply -f kubernetes/service.yaml
-                        kubectl apply -f kubernetes/ingress.yaml
+                        
+                        # Update kubeconfig with legacy auth
+                        aws eks update-kubeconfig --region us-east-1 --name ecommerce-eks --kubeconfig kubeconfig.yaml
+                        
+                        # Apply Kubernetes manifests using kubeconfig
+                        KUBECONFIG=kubeconfig.yaml kubectl apply -f kubernetes/deployment.yaml
+                        KUBECONFIG=kubeconfig.yaml kubectl apply -f kubernetes/service.yaml
+                        KUBECONFIG=kubeconfig.yaml kubectl apply -f kubernetes/ingress.yaml
                     '''
                 }
             }
