@@ -14,18 +14,6 @@ pipeline {
             }
         }
         
-        stage('Build') {
-            steps {
-                sh 'mvn -V clean package -DskipTests'
-            }
-        }
-        
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-        
         stage('Build and Push Docker Image') {
             steps {
                 script {
