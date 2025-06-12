@@ -1,4 +1,4 @@
-FROM maven:3.8-openjdk-11 AS build
+FROM maven:3.2.5-jdk-8 AS build
 WORKDIR /app
 COPY pom.xml .
 # Download dependencies
@@ -8,7 +8,7 @@ COPY src ./src
 # Build the application
 RUN mvn package -DskipTests
 
-FROM openjdk:11-jre-slim
+FROM openjdk:8-jre-slim
 WORKDIR /app
 # Copy the JAR from the build stage
 COPY --from=build /app/target/ecommerce-1.0-SNAPSHOT.jar ./app.jar

@@ -1,6 +1,10 @@
 pipeline {
     agent any
     
+    tools {
+        maven 'Maven 3.2.5'
+    }
+    
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
         DOCKER_IMAGE = 'samsow/ecommerce-backend'
@@ -16,7 +20,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh 'mvn -V clean package -DskipTests'
             }
         }
         
