@@ -1,10 +1,6 @@
 pipeline {
     agent any
-    
-    tools {
-        maven 'Maven 3.2.5'
-    }
-    
+   
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
         DOCKER_IMAGE = 'samsow/ecommerce-backend'
