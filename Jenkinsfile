@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: '
+                git branch: 'development', url: 'https://github.com/SASowah/devops-end-to-end-labs.git'
             }
         }
         
@@ -50,6 +50,7 @@ pipeline {
                     sh "kubectl apply -f kubernetes/deployment.yaml"
                     sh "kubectl apply -f kubernetes/service.yaml"
                     sh "kubectl apply -f kubernetes/ingress.yaml"
+                    
                 }
             }
         }
