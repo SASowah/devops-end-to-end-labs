@@ -118,8 +118,9 @@ Temporary Items
 **/.terraform/*
 
 # .tfstate files
-*.tfstate
-*.tfstate.*
+# Uncommenting these to include tfstate files for demonstration purposes
+# *.tfstate
+# *.tfstate.*
 
 # Crash log files
 crash.log
