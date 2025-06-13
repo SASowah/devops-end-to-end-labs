@@ -34,7 +34,7 @@ devops-end-to-end-labs/
 5. **Expose the app** via ALB Ingress
 6. **Monitor the app** using Prometheus and Grafana
 
-## Monitoring Setup
+
 - **Prometheus** scrapes metrics from app containers
 - **Grafana** visualizes cluster and app-level metrics
 - Accessible via a LoadBalancer service
@@ -43,6 +43,4 @@ devops-end-to-end-labs/
 ##  Access
 - **Application**: `http://<ALB_DNS>` → Displays a welcome page
 - **Grafana**: `http://<Grafana_LoadBalancer_DNS>`  
-  - **Username**: `admin`  
-  - **Password**: `admin`
 
