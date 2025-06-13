@@ -1,0 +1,10 @@
+replicaCount: 2
+
+image:
+  repository: samsow/java-backend
+  tag: latest
+
+service:
+  type: clusterIP
+  name: java-backend
+  port: 8080
