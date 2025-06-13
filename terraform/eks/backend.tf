@@ -1,9 +1,11 @@
-terraform {
-  backend "s3" {
-    bucket         = "sasowah-devops-state"
-    key            = "eks/terraform.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "devops-tf-locks"  # Ensure this matches the DynamoDB table name in your backend-bootstrap
-    encrypt = true
-  }
-}
+# Using local state storage
+# If you need remote state in the future, uncomment and configure the S3 backend below
+# terraform {
+#   backend "s3" {
+#     bucket         = "ecommerce-terraform-state"
+#     key            = "eks/terraform.tfstate"
+#     region         = "us-east-1"
+#     encrypt        = true
+#     dynamodb_table = "terraform-lock"
+#   }
+# }

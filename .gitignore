@@ -148,7 +148,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-.terraform.terraform.lock.hcl
+.terraform.lock.hcl
+terraform.lock.hcl
 
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform
@@ -157,6 +158,9 @@ terraform.rc
 # Reference/backup text files
 argocdapplicationsbackend.yaml.txt
 terraformeksalb-controller.tf.txt
+*.txt.bak
+*.yaml.bak
+*.tf.bak
 
 
 # Node.js dependencies
@@ -175,17 +179,36 @@ kubeconfig
 *.crt
 *.pub
 patch.json
+kube/
+.kube/
+.kube-config
+charts/*/charts/
+charts/*/requirements.lock
+values-*.yaml
+!values-example.yaml
 
 # IDE specific files
 .idea/
 .vscode/
 *.sublime-*
 *.code-workspace
+*.iml
+*.iws
+*.ipr
+.project
+.settings/
+nbproject/
+.nb-gradle/
 
 # Environment variables
 .env
 .env.*
 .envrc
+*.env
+.aws/
+aws.json
+credentials
+config
 
 # Temporary files
 *.swp
@@ -208,3 +231,26 @@ out/
 *.orig
 *.rej
 *.tmp
+
+# Jenkins specific
+.jenkins/
+jenkins_home/
+.jenkins-cli.jar
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+logs/
+*.log.*
+npm-debug.log*
+
+# Coverage reports
+coverage/
+.coverage
+htmlcov/
+.nyc_output/

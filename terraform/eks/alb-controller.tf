@@ -1,80 +1,53 @@
-# alb-controller.tf
-
+# Create IAM policy for ALB Ingress Controller
 resource "aws_iam_policy" "alb_ingress_controller" {
   name        = "AWSLoadBalancerControllerIAMPolicy"
   description = "Policy for ALB ingress controller"
   policy      = file("${path.module}/alb-iam-policy.json")
 }
 
-resource "aws_iam_role" "alb_controller_irsa" {
-  name = "eks-alb-ingress-controller"
+# Create IAM role for ALB Ingress Controller with IRSA
+module "alb_controller_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.20.0"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [{
-      Effect = "Allow",
-      Principal = {
-        Federated = module.eks.oidc_provider_arn
-      },
-      Action = "sts:AssumeRoleWithWebIdentity",
-      Condition = {
-        StringEquals = {
-          "${replace(module.eks.cluster_oidc_issuer_url, "https://", "")}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
-        }
-      }
-    }]
-  })
-}
+  role_name = "eks-alb-ingress-controller"
+  attach_load_balancer_controller_policy = true
 
-resource "aws_iam_role_policy_attachment" "alb_controller_policy_attach" {
-  role       = aws_iam_role.alb_controller_irsa.name
-  policy_arn = aws_iam_policy.alb_ingress_controller.arn
-}
-
-resource "kubernetes_service_account" "aws_load_balancer_controller" {
-  metadata {
-    name      = "aws-load-balancer-controller"
-    namespace = "kube-system"
-    annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.alb_controller_irsa.arn
+  oidc_providers = {
+    main = {
+      provider_arn = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
   }
 }
 
+# Install ALB controller using Helm
 resource "helm_release" "aws_load_balancer_controller" {
   name       = "aws-load-balancer-controller"
   namespace  = "kube-system"
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
-  version    = "1.7.1"
+  version    = "1.4.4"
 
   set {
     name  = "clusterName"
     value = var.cluster_name
   }
-
-  set {
-    name  = "region"
-    value = var.aws_region
-  }
-
-  set {
-    name  = "vpcId"
-    value = module.vpc.vpc_id
-  }
-
+  
   set {
     name  = "serviceAccount.create"
-    value = "false"
+    value = "true"
   }
-
+  
   set {
     name  = "serviceAccount.name"
-    value = kubernetes_service_account.aws_load_balancer_controller.metadata[0].name
+    value = "aws-load-balancer-controller"
+  }
+  
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = module.alb_controller_role.iam_role_arn
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.alb_controller_policy_attach,
-    kubernetes_service_account.aws_load_balancer_controller
-  ]
+  depends_on = [module.eks]
 }
