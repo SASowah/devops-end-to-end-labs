@@ -150,6 +150,9 @@ override.tf.json
 terraform.rc
 .terraform.terraform.lock.hcl
 
+terraform\backend-bootstrap\.terraform.lock.hcl
+terraform\backend-bootstrap\.terraform.tfstate.lock.info
+
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform
 
